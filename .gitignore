@@ -1,0 +1,12 @@
+dados/
+resultados/
+figuras/
+*.rds
+*.csv
+!poster/centis.csv
+!poster/familias.csv
+*.aux
+*.log
+.Rhistory
+.Rproj.user/
+.claude/

@@ -1,0 +1,139 @@
+%% Pôster A0 da 70ª RBras — GAMLSS para produção diária de leite.
+%% Compile com: pdflatex poster.tex
+%% Dados (centis.csv, pontos.csv, familias.csv) vêm de dados_poster.R,
+%% rodado a partir da raiz do projeto.
+
+\documentclass{rbras-poster}
+
+% Título e autores longos: corpo reduzido só aqui, para caber no cabeçalho.
+\titulo{\fontsize{60bp}{66bp}\selectfont Beyond the average lactation curve:
+  distributional regression for daily milk yield in Holstein cows}
+\autores{\fontsize{28bp}{34bp}\selectfont João Paulo Assis Bonifácio · \textbf{Pedro Mambelli Fernandes} ·
+  Geovane Fernandes da Silva · Gean Pereira Damaceno ·
+  João Vitor Andrade Alves de Souza · Nayara Maria Barbosa de Sousa ·
+  Marina de Arruda Camargo Danes · Luiz Ricardo Nakamura}
+\afiliacoes{Universidade Federal de Lavras (UFLA), Lavras, MG}
+\email{pedromambelli@gmail.com}
+\mensagem{No pico da lactação, a vaca mediana produz 31,5~L/dia, mas 90\%
+  do rebanho fica entre 17,8 e 46,8~L.}
+% QR code: coloque aqui a URL do repositório no GitHub. Vazio = quadro tracejado.
+\qrlink{}
+\qrlegenda{Código e dados no GitHub}
+\logoevento{logo-rbras.png}
+\logoinstituicao{logo-ufla.png}
+\conclusoes
+{Os centis mostram se uma vaca está atípica para o seu DEL.}
+{Dispersão, assimetria e curtose mudam ao longo da lactação.}
+{Próximo passo: efeito de vaca e vários rebanhos.}
+\referencias{[1] Rigby, R. A.; Stasinopoulos, D. M. (2005). Generalized additive
+  models for location, scale and shape. \textit{JRSS C}, 54, 507--554.\par
+  [2] Rigby, R. A.; Stasinopoulos, D. M. (2004). Smooth centile curves for skew
+  and kurtotic data modelled using the Box-Cox power exponential distribution.
+  \textit{Statistics in Medicine}, 23, 3053--3076.}
+\agradecimentos{Fazenda Palmital (UFLA), pela cessão dos dados.}
+
+\begin{document}
+\hyphenpenalty=10000 \exhyphenpenalty=10000
+
+\begin{colunaesquerda}
+\begin{secao}{1}{Pergunta}
+A curva média de lactação não diz se uma vaca produz pouco
+\textit{para o seu estágio}.
+\par\vspace{16bp}
+\textbf{Como é a distribuição inteira da produção em cada dia de lactação?}
+\end{secao}
+
+\begin{secao}{2}{Dados}
+\begin{itemize}
+\item 62 vacas Holandesas, ordenha robótica
+\item Fazenda Palmital (UFLA), Ijaci, MG
+\item 9.514 registros diários, abr/2024 a jan/2025
+\item Dias em lactação (DEL) de 1 a 705
+\end{itemize}
+\end{secao}
+
+\begin{secao}{3}{Método}
+GAMLSS: cada parâmetro da distribuição é uma curva suave do DEL.
+\begin{caixaequacao}
+\begin{equation*}
+Y \mid \mathrm{DEL} \sim \mathrm{BCPE}(\mu,\sigma,\nu,\tau)
+\end{equation*}
+\begin{equation*}
+g_k(\theta_k) = s_k(\mathrm{DEL}), \quad k = 1,\dots,4
+\end{equation*}
+{\tamRotulo\color{rbCinza} $\mu$ mediana · $\sigma$ dispersão\\
+  $\nu$ assimetria · $\tau$ curtose\\ $s_k$: P-splines\par}
+\end{caixaequacao}
+\par\vspace{24bp}
+Família escolhida pelo AIC; ajuste conferido por \textit{worm plot}.
+\end{secao}
+\end{colunaesquerda}
+
+\begin{colunadireita}
+\begin{secao}{4}{Resultados}
+\duasfiguras{%
+  \figura{O pico vem aos 60 DEL, com 29~L entre C5 e C95}
+  {Produção diária de leite (L), por DEL}
+  {\begin{axis}[rbras linha, xmin=0, xmax=400, ymin=0, ymax=60, clip mode=individual,
+                 xtick={100,200,...,400}, ytick={0,10,...,60},
+                 yticklabel style={/pgf/number format/.cd, fixed, precision=0}]
+    \addplot[only marks, mark=*, mark size=1.6bp, rbGrade]
+      table[x=DIM, y=y, col sep=comma] {pontos.csv};
+    \foreach \c in {C5,C95}
+      \addplot[rbCinzaClaro, line width=2.5bp]
+        table[x=DIM, y=\c, col sep=comma] {centis.csv};
+    \foreach \c in {C25,C75}
+      \addplot[rbCinza, line width=3bp]
+        table[x=DIM, y=\c, col sep=comma] {centis.csv};
+    \addplot[rbAzul, line width=5.6bp]
+      table[x=DIM, y=C50, col sep=comma] {centis.csv};
+    \addplot[only marks, mark=*, mark size=7bp, rbAzul] coordinates {(60,31.46)};
+    \node[anchor=south, font=\tamEixo\bfseries, text=rbAzul]
+      at (axis cs:60,51) {31,5};
+    \draw[rbAzul, line width=2bp] (axis cs:60,50.5) -- (axis cs:60,33.5);
+    \node[anchor=west, font=\tamEixo, text=rbCinza] at (axis cs:405,32.2) {C95};
+    \node[anchor=west, font=\tamEixo, text=rbCinza] at (axis cs:405,24.4) {C75};
+    \node[anchor=west, font=\tamEixo\bfseries, text=rbAzul] at (axis cs:405,19.6) {C50};
+    \node[anchor=west, font=\tamEixo, text=rbCinza] at (axis cs:405,14.6) {C25};
+    \node[anchor=west, font=\tamEixo, text=rbCinza] at (axis cs:405,7.7) {C5};
+    \end{axis}}
+  {Centis 5, 25, 50, 75 e 95 do modelo BCPE. Pontos: amostra de 2.500 registros.}}
+{%
+  \figura{A faixa de 90\% encolhe de 32~L para 24~L}
+  {Amplitude entre centis (L), por DEL}
+  {\begin{axis}[rbras linha, xmin=0, xmax=400, ymin=0, ymax=35,
+                 xtick={100,200,...,400}, ytick={0,5,...,35},
+                 yticklabel style={/pgf/number format/.cd, fixed, precision=0}]
+    \addplot[rbCinzaClaro, line width=3.75bp]
+      table[x=DIM, y expr=\thisrow{C75}-\thisrow{C25}, col sep=comma] {centis.csv};
+    \addplot[rbAzul, line width=5.6bp]
+      table[x=DIM, y expr=\thisrow{C95}-\thisrow{C5}, col sep=comma] {centis.csv};
+    \node[anchor=south, font=\tamEixo\bfseries, text=rbAzul]
+      at (axis cs:230,28) {C95 $-$ C5};
+    \node[anchor=south, font=\tamEixo, text=rbCinza]
+      at (axis cs:300,9.8) {C75 $-$ C25};
+    \end{axis}}
+  {Variância constante, como nos modelos clássicos, não descreveria o rebanho.}}
+
+\vspace{90bp}
+
+\tabela{Ajustar a curtose melhora o modelo: a BCPE vence}
+{\renewcommand\arraystretch{1.5}%
+  \setlength\aboverulesep{0pt}\setlength\belowrulesep{0pt}%
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X
+                                 *{3}{>{\raggedleft\arraybackslash}X}@{}}
+  \textbf{Distribuição} & \textbf{Parâmetros} & \textbf{AIC} & \textbf{$\Delta$AIC}\\
+  \arrayrulecolor{rbAzul}\specialrule{3bp}{0pt}{0pt}
+  \rowcolor{rbFundo}
+  \textbf{BCPE} & \textbf{4} & \textbf{64.301} & \textbf{0}\\
+  \arrayrulecolor{rbGrade}\specialrule{1bp}{0pt}{0pt}
+  Box-Cox \textit{t} & 4 & 64.351 & 49\\
+  \specialrule{1bp}{0pt}{0pt}
+  Box-Cox Cole-Green & 3 & 64.441 & 140\\
+  \specialrule{1bp}{0pt}{0pt}
+  \end{tabularx}}
+{Todos os parâmetros como P-splines do DEL.}
+\end{secao}
+\end{colunadireita}
+
+\end{document}
