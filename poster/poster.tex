@@ -16,9 +16,17 @@
 \email{pedromambelli@gmail.com}
 \mensagem{No pico da lactação, a vaca mediana produz 31,5~L/dia, mas 90\%
   do rebanho fica entre 17,8 e 46,8~L.}
-% QR code: coloque aqui a URL do repositório no GitHub. Vazio = quadro tracejado.
-\qrlink{}
-\qrlegenda{Código e dados no GitHub}
+% QR code do repositório, com correção de erro alta (H, 30%) para o logo central.
+\qrset{level=H}
+\qrlink{https://github.com/bonijoao/rbras70-curvas-centilicas-leite}
+\qrlegenda{Código e pôster no GitHub}
+% Logo do GitHub no centro do QR (centro do quadro: 2093, 790 bp do topo).
+\AddToShipoutPictureFG*{\AtPageUpperLeft{%
+  \begin{tikzpicture}[x=1bp,y=-1bp,overlay]
+  \fill[white] (2093,790) circle (40bp);
+  \node[inner sep=0] at (2093,790)
+    {\includegraphics[width=64bp]{github-mark.pdf}};
+  \end{tikzpicture}}}
 \logoevento{logo-rbras.png}
 \logoinstituicao{logo-ufla.png}
 \conclusoes
