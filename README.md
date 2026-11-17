@@ -6,7 +6,7 @@ Pôster apresentado na [70ª RBras](https://70rbras.org/) (IMECC/Unicamp, Campin
 
 📄 **[Pôster em PDF](poster/poster.pdf)**
 
-João Paulo Assis Bonifácio · **Pedro Mambelli Fernandes** · Geovane Fernandes da Silva ·
+**João Paulo Assis Bonifácio** · Pedro Mambelli Fernandes · Geovane Fernandes da Silva ·
 Gean Pereira Damaceno · João Vitor Andrade Alves de Souza · Nayara Maria Barbosa de Sousa ·
 Marina de Arruda Camargo Danes · Luiz Ricardo Nakamura
 
